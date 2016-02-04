@@ -2,7 +2,7 @@
 # tasks file for users
 
 - name: add group
-  group: name={{ item.group }} gid={{ item.gid }}
+  group: name={{ item.name }} gid={{ item.gid }}
   with_items: users_group_list
 
 - name: add user
