@@ -1,2 +1,24 @@
 ---
 # tasks file for users
+
+- name: add group
+  group: name={{ item.group }} gid={{ item.gid }}
+  with_items: users_group_list
+
+- name: add user
+  user:
+    name:       '{{ item.name }}'
+    uid:        '{{ item.uid }}'
+    comment:    '{{ item.comment | default(omit) }}'
+    state:      '{{ item.state | default("present") }}'
+    group:      '{{ item.group }}'
+    groups:     '{{ item.groups | if item.groups is defined join(",") else omit }}'
+    append:     '{{ item.append | default("yes") }}'
+    createhome: '{{ item.createhome | default("yes") }}'
+    force:      '{{ item.force | default("no") }}'
+    home:       '{{ item.home | default(omit) }}'
+    move_home:  '{{ item.move_home | default("no") }}'
+    password:   '{{ item.password | default(omit) }}'
+    shell:      '{{ item.shell | default(omit) }}'
+    update_password: '{{ item.update_password | default("on_create") }}'
+    with_items: users_user_list
