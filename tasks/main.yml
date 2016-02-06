@@ -19,6 +19,7 @@
     home:       '{{ item.home | default(omit) }}'
     move_home:  '{{ item.move_home | default("no") }}'
     password:   '{{ item.password | default(omit) }}'
+    remove:     '{{ item.remove | default("no") }}'
     shell:      '{{ item.shell | default(omit) }}'
     update_password: '{{ item.update_password | default("on_create") }}'
   with_items: users_user_list
