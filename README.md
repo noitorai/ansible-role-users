@@ -31,7 +31,7 @@ ansibleで管理する全ユーザのハッシュ(マッピング)を定義し�
 
 | key | required | default value |
 |-----|----------|---------------|
-| name | yes |
+| name | yes |  |
 | uid | yes |
 | comment no |  |
 | state | no | present |
@@ -74,6 +74,8 @@ users_generic_user_map:
 作成/削除するユーザのリストを定義します。
 リストの要素は users_generic_user_map で定義したユーザ、またはそれと同じ構造のハッシュです。
 
+#### Example users_generic_user_mapw
+
 ```
 users_user_list:
   - '{{ users_generic_user_map["test1"] }}'
@@ -93,7 +95,11 @@ users_user_list:
 ### users_group_list
 
 作成/削除するグループのリストを定義します。
-XXX:
+
+| key | required | default value |
+|-----|----------|---------------|
+| name | yes |  |
+| gid | yes |  |
 
 Dependencies
 ------------
