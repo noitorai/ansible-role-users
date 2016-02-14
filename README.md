@@ -101,6 +101,20 @@ users_user_list:
 | name | yes |  |
 | gid | yes |  |
 
+#### Example users_group_list
+
+```
+users_group_list:
+  - name: group1
+    gid: 1001
+  - name: group2
+    gid: 1202
+  - name: group3
+    gid: 1303
+  - name: group4
+    gid: 1404
+```
+
 Dependencies
 ------------
 
