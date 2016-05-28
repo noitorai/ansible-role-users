@@ -1,6 +1,5 @@
 ---
-- hosts: localhost
-  sudo: yes
-  connection: local
+- hosts: testservers
+  become: yes
   roles: 
   - users
