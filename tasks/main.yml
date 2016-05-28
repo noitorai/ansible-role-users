@@ -12,7 +12,7 @@
     comment:    '{{ item.comment | default(omit) }}'
     state:      '{{ item.state | default("present") }}'
     group:      '{{ item.group }}'
-    groups:     '{{ item.groups|join(",") if item.groups is defined else omit }}'
+    groups:     '{{ item.groups }}'
     append:     '{{ item.append | default("yes") }}'
     createhome: '{{ item.createhome | default("yes") }}'
     force:      '{{ item.force | default("no") }}'
