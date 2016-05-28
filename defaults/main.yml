@@ -1,2 +1,5 @@
 ---
 # defaults file for users
+users_generic_user_map: []
+users_user_list: []
+users_group_list: []
