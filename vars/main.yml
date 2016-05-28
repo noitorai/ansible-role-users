@@ -12,17 +12,17 @@ users_group_list:
     gid: 1203
 
 users_generic_user_list:
-  test1:
+  - &test1
     name: test1
     uid: 1200
     group: test1
-  test2:
+  - &test2
     name: test2
     uid: 1202
     comment: "test2 user"
     group: test2
     groups: sudo
-  test3:
+  - &test3
     name: test3
     uid: 1203
     group: test3
@@ -30,5 +30,4 @@ users_generic_user_list:
     comment: "test3 user"
 
 users_user_list:
-  - '{{ users_generic_user_list["test1"] }}'
-
+  - *test1
