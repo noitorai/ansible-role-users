@@ -3,9 +3,34 @@
 
 - name: add group
   group: name={{ item.name }} gid={{ item.gid }}
-  with_items: users_group_list
+  with_items: "{{ users_group_list }}"
 
-- name: add user
+- name: extract users from users_generic_user_list
+  set_fact:
+    userinfo: "{{ users_generic_user_list |selectattr('name','equalto',item) |list }}"
+  register: userlist_raw
+  with_items: "{{ users_username_list }}"
+
+- name: add generic user
+  user:
+    name:       "{{ item.ansible_facts.userinfo[0].name }}"
+    uid:        "{{ item.ansible_facts.userinfo[0].uid }}"
+    comment:    '{{ item.ansible_facts.userinfo[0].comment | default(omit) }}'
+    state:      '{{ item.ansible_facts.userinfo[0].state | default("present") }}'
+    group:      "{{ item.ansible_facts.userinfo[0].group }}"
+    groups:     '{{ item.ansible_facts.userinfo[0].groups | default(omit) }}'
+    append:     '{{ item.ansible_facts.userinfo[0].append | default("yes") }}'
+    createhome: '{{ item.ansible_facts.userinfo[0].createhome | default("yes") }}'
+    force:      '{{ item.ansible_facts.userinfo[0].force | default("no") }}'
+    home:       '{{ item.ansible_facts.userinfo[0].home | default(omit) }}'
+    move_home:  '{{ item.ansible_facts.userinfo[0].move_home | default("no") }}'
+    password:   '{{ item.ansible_facts.userinfo[0].password | default(omit) }}'
+    remove:     '{{ item.ansible_facts.userinfo[0].remove | default("no") }}'
+    shell:      '{{ item.ansible_facts.userinfo[0].shell | default(omit) }}'
+    update_password: '{{ item.ansible_facts.userinfo[0].update_password | default("on_create") }}'
+  with_items: "{{ userlist_raw.results }}"
+
+- name: add extra user
   user:
     name:       '{{ item.name }}'
     uid:        '{{ item.uid }}'
@@ -22,4 +47,4 @@
     remove:     '{{ item.remove | default("no") }}'
     shell:      '{{ item.shell | default(omit) }}'
     update_password: '{{ item.update_password | default("on_create") }}'
-  with_items: users_user_list
+  with_items: "{{ users_extra_user_list }}"
