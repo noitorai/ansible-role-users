@@ -1,0 +1,12 @@
+---
+users_group_list:
+  - { name: admin, gid: 1101 }
+  - { name: test1, gid: 1200 }
+  - { name: test2, gid: 1202 }
+  - { name: test3, gid: 1203 }
+
+users_generic_user_list:
+  - { name: test1, uid: 1200, group: test1 }
+  - { name: test2, uid: 1202, group: test2,  groups: wheel, comment: "test2 user" }
+  - { name: test3, uid: 1203, group: test3,  groups: wheel, comment: "test3 user" }
+

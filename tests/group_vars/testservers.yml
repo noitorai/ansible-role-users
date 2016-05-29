@@ -1,32 +1,8 @@
 ---
-users_group_list:
-  - name: admin
-    gid: 1101
-  - name: test1
-    gid: 1200
-  - name: test2
-    gid: 1202
-  - name: test3
-    gid: 1203
+users_username_list:
+  - test2
+  - test1
+  - test3
 
-users_generic_user_list:
-  - &test1
-    name: test1
-    uid: 1200
-    group: test1
-  - &test2
-    name: test2
-    uid: 1202
-    comment: "test2 user"
-    group: test2
-    groups: wheel
-  - &test3
-    name: test3
-    uid: 1203
-    group: test3
-    groups: wheel
-    comment: "test3 user"
-
-users_user_list:
-  - *test1
-  - *test2
+users_extra_user_list:
+  - { name: extrauser, uid: 1305, group: extragroup, comment: "extrauser" }
