@@ -5,6 +5,11 @@
   group: name={{ item.name }} gid={{ item.gid }}
   with_items: "{{ users_group_list }}"
 
+- name: add extra group
+  group: name={{ item.name }} gid={{ item.gid }}
+  with_items: "{{ users_extra_group_list }}"
+  
+  
 - name: extract users from users_generic_user_list
   set_fact:
     userinfo: "{{ users_generic_user_list |selectattr('name','equalto',item) |list }}"
@@ -48,3 +53,11 @@
     shell:      '{{ item.shell | default(omit) }}'
     update_password: '{{ item.update_password | default("on_create") }}'
   with_items: "{{ users_extra_user_list }}"
+
+- name: deply authorized_keys
+  authorized_key:
+    user:  "{{ item.ansible_facts.userinfo[0].name }}"
+    key:   "{{ lookup('file', users_authorized_keys_dir + '/' + item.ansible_facts.userinfo[0].name) }}"
+    state: "present"
+  when: ( item.ansible_facts.userinfo[0].authorized_keys is defined ) and ( item.ansible_facts.userinfo[0].authorized_keys == "yes" )
+  with_items: "{{ userlist_raw.results }}"
