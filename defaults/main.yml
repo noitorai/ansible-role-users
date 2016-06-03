@@ -3,3 +3,4 @@
 users_generic_user_map: []
 users_user_list: []
 users_group_list: []
+users_authorized_keys_dir: "files/authorized_keys.d/"
