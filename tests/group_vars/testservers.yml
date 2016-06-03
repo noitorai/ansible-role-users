@@ -4,5 +4,8 @@ users_username_list:
   - test1
   - test3
 
+users_extra_group_list:
+  - { name: extragroup, gid: 1300 }
+  
 users_extra_user_list:
   - { name: extrauser, uid: 1305, group: extragroup, comment: "extrauser" }
