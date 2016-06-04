@@ -59,16 +59,27 @@
     user:  "{{ item.ansible_facts.userinfo[0].name }}"
     key:   "{{ lookup('file', users_authorized_keys_dir + '/' + item.ansible_facts.userinfo[0].name) }}"
     state: "present"
-  when: ( item.ansible_facts.userinfo[0].authorized_keys is defined ) and ( item.ansible_facts.userinfo[0].authorized_keys == "yes" )
+  when: item.ansible_facts.userinfo[0].authorized_keys is defined and
+        item.ansible_facts.userinfo[0].authorized_keys == "yes"
   with_items: "{{ userlist_raw.results }}"
 
 - name: sudoers configuration (group)
   template:
     src:    sudoers_group.j2
-    dest:   "/etc/sudoers.d/{{ item.name }}"
+    dest:   "/etc/sudoers.d/group_{{ item.name }}"
     owner:  root
     group:  root
-    mode:   0440
-    backup: yes
+    mode:   "0440"
   when: item.sudo is defined and item.sudo == "yes"
   with_items: "{{ users_group_list }}"
+
+- name: sudoers configuration (user)
+  template:
+    src:    sudoers_user.j2
+    dest:   "/etc/sudoers.d/user_{{ item.ansible_facts.userinfo[0].name }}"
+    owner:  root
+    group:  root
+    mode:   "0440"
+  when: item.ansible_facts.userinfo[0].sudo is defined and
+        item.ansible_facts.userinfo[0].sudo == "yes"
+  with_items: "{{ userlist_raw.results }}"
