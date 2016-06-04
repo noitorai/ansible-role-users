@@ -12,7 +12,7 @@
   
 - name: extract users from users_generic_user_list
   set_fact:
-    userinfo: "{{ users_generic_user_list |selectattr('name','equalto',item) |list }}"
+    userinfo: "{{ users_generic_user_list |selectattr('name','match','^' + item + '$') |list }}"
   register: userlist_raw
   with_items: "{{ users_username_list }}"
 
