@@ -19,7 +19,7 @@ Role Variables
 | users_username_list       | 作成/削除するユーザのリスト (詳細は後述)                          | []                         |
 | users_group_list          | 作成/削除するグループのリスト (詳細は後述)                        | []                         |
 | users_extra_user_list     | users_username_list以外に作成/削除するユーザのリスト (詳細は後述) | []                         |
-| users_extra_group_list    | users_group_list以外に作成/削除するグループのリスト (詳細は後述)  |                            |
+| users_extra_group_list    | users_group_list以外に作成/削除するグループのリスト (詳細は後述)  | []                         |
 | users_authorized_keys_dir | 参照するauthorized_keysの配置場所                                 | "files/authorized_keys.d/" |
 
 

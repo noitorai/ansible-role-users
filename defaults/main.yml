@@ -1,6 +1,8 @@
 ---
 # defaults file for users
 users_generic_user_map: []
-users_user_list: []
+users_username_list: []
 users_group_list: []
+users_extra_user_list: []
+users_extra_group_list: []
 users_authorized_keys_dir: "files/authorized_keys.d/"
