@@ -61,3 +61,14 @@
     state: "present"
   when: ( item.ansible_facts.userinfo[0].authorized_keys is defined ) and ( item.ansible_facts.userinfo[0].authorized_keys == "yes" )
   with_items: "{{ userlist_raw.results }}"
+
+- name: sudoers configuration (group)
+  template:
+    src:    sudoers_group.j2
+    dest:   "/etc/sudoers.d/{{ item.name }}"
+    owner:  root
+    group:  root
+    mode:   0440
+    backup: yes
+  when: item.sudo is defined and item.sudo == "yes"
+  with_items: "{{ users_group_list }}"
