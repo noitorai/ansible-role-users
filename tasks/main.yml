@@ -10,14 +10,6 @@
       {% endfor %}
       {{ l }}
 
-- name: add group
-  group: name={{ item.name }} gid={{ item.gid }}
-  with_items: "{{ grouplist }}"
-
-- name: add extra group
-  group: name={{ item.name }} gid={{ item.gid }}
-  with_items: "{{ users_extra_group_list }}"
-  
 - name: extract users from users_generic_user_list
   set_fact:
     userlist: |
@@ -27,6 +19,12 @@
       {% endfor %}
       {{ l }}
 
+- name: add group
+  group: name={{ item.name }} gid={{ item.gid }}
+  with_flattened:
+    - "{{ grouplist }}"
+    - "{{ users_extra_group_list }}"
+    
 - name: add user
   user:
     name:       '{{ item.name }}'
