@@ -79,4 +79,3 @@
     owner:  root
     group:  root
     mode:   "0440"
-  when: sudogroup_exists or sudouser_exists
