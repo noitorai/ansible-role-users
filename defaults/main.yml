@@ -6,3 +6,7 @@ users_group_list: []
 users_extra_user_list: []
 users_extra_group_list: []
 users_authorized_keys_dir: "files/authorized_keys.d/"
+users_sudoers_filename: 'ansiblesmanaged'
+
+sudogroup_exists: false
+sudouser_exists: false

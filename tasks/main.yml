@@ -63,23 +63,20 @@
         item.ansible_facts.userinfo[0].authorized_keys == "yes"
   with_items: "{{ userlist_raw.results }}"
 
-- name: sudoers configuration (group)
-  template:
-    src:    sudoers_group.j2
-    dest:   "/etc/sudoers.d/group_{{ item.name }}"
-    owner:  root
-    group:  root
-    mode:   "0440"
-  when: item.sudo is defined and item.sudo == "yes"
-  with_items: "{{ users_group_list }}"
+- name: check if sudo group exists
+  set_fact:
+    sudogroup_exists: "{{ users_group_list |rejectattr('sudo', 'undefined') |selectattr('sudo','match','^yes$') |list |length() > 0 }}"
 
-- name: sudoers configuration (user)
+- name: check if sudo user exists
+  set_fact:
+    sudouser_exists: "{{ sudouser_exists or (item.ansible_facts.userinfo[0].sudo is defined and item.ansible_facts.userinfo[0].sudo == 'yes') }}"
+  with_items: "{{ userlist_raw.results }}"
+
+- name: sudoers configuration
   template:
-    src:    sudoers_user.j2
-    dest:   "/etc/sudoers.d/user_{{ item.ansible_facts.userinfo[0].name }}"
+    src:    sudoers_template.j2
+    dest:   "/etc/sudoers.d/{{ users_sudoers_filename }}"
     owner:  root
     group:  root
     mode:   "0440"
-  when: item.ansible_facts.userinfo[0].sudo is defined and
-        item.ansible_facts.userinfo[0].sudo == "yes"
-  with_items: "{{ userlist_raw.results }}"
+  when: sudogroup_exists or sudouser_exists

@@ -1,0 +1,24 @@
+# This configuration written by ansible.
+# Manual customization of this file is not recommended.
+{% if sudogroup_exists %}
+
+# Allows people in following group(s) to run all commands
+{%   for i in users_group_list %}
+{%     if 'sudo' in i %}
+{%       if i.sudo == 'yes' %}
+%{{ i.name }} ALL=(ALL:ALL) ALL
+{%       endif %}
+{%     endif %}
+{%   endfor %}
+{% endif %}
+{% if sudouser_exists %}
+
+# Allows following user(s) to run all commands
+{%   for i in userlist_raw.results %}
+{%     if 'sudo' in i.ansible_facts.userinfo[0] %}
+{%       if i.ansible_facts.userinfo[0].sudo == 'yes' %}
+{{ i.ansible_facts.userinfo[0].name }} ALL=(ALL:ALL) ALL
+{%       endif %}
+{%     endif %}
+{%   endfor %}
+{% endif %}
