@@ -5,7 +5,7 @@
 # Allows people in following group(s) to run all commands
 {%   for i in users_group_list %}
 {%     if 'sudo' in i %}
-{%       if i.sudo == 'yes' %}
+{%       if i.sudo %}
 %{{ i.name }} ALL=(ALL:ALL) ALL
 {%       endif %}
 {%     endif %}
@@ -16,7 +16,7 @@
 # Allows following user(s) to run all commands
 {%   for i in userlist %}
 {%     if 'sudo' in i %}
-{%       if i.sudo == 'yes' %}
+{%       if i.sudo %}
 {{ i.name }} ALL=(ALL:ALL) ALL
 {%       endif %}
 {%     endif %}
