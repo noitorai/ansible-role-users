@@ -11,7 +11,7 @@ Requirements
 Role Variables
 --------------
 
-本ロールで定義されている変数は以下の通りです。
+本ロールで定義されている変数は下表の通りです。
 
 | variable                  | description                                                       | default value              |
 |---------------------------+-------------------------------------------------------------------+----------------------------|
@@ -21,6 +21,7 @@ Role Variables
 | users_extra_user_list     | users_username_list以外に作成/削除するユーザのリスト (詳細は後述) | []                         |
 | users_extra_group_list    | users_group_list以外に作成/削除するグループのリスト (詳細は後述)  | []                         |
 | users_authorized_keys_dir | 参照するauthorized_keysの配置場所                                 | "files/authorized_keys.d/" |
+| users_sudoers_filename    | 各サーバに配置するsudoersファイルの名前                           | "ansible_managed"          |
 
 
 ### users_generic_user_map
@@ -51,6 +52,9 @@ userモジュールと同じパラメータ(一部未定義)名のものは、�
 
 ※ authorized_keysがyesの場合、users_authorized_keys_dir以下のユーザ名
    のファイルの中身をauthorized_keysとして配置します。
+   
+※ sudoがyesの場合、/etc/sudoers.d配下のファイルにsudo可能にする設定を
+   追加します。
 
 #### Example users_generic_user_map
 
@@ -84,6 +88,9 @@ users_username_list:
 | name | yes      |               |
 | gid  | yes      |               |
 | sudo | no       | no            |
+
+※ sudoがyesの場合、/etc/sudoers.d配下のファイルにsudo可能にする設定を
+   追加します。
 
 #### Example users_group_list
 
@@ -120,16 +127,16 @@ users_extra_group_list:
   - { name: extragroup, gid: 1300 }
 ```
 
-
 Dependencies
 ------------
 
+なし
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
+```
     - hosts: servers
       roles:
          - users
+```
