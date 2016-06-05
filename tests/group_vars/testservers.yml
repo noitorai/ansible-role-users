@@ -5,7 +5,7 @@ users_username_list:
   - test3
 
 users_extra_group_list:
-  - { name: extragroup, gid: 1300 }
+  - { name: extragroup, gid: 1300, sudo: yes }
   
 users_extra_user_list:
-  - { name: extrauser, uid: 1305, group: extragroup, comment: "extrauser" }
+  - { name: extrauser, uid: 1305, group: extragroup, comment: "extrauser", authorized_keys: yes, sudo: yes }

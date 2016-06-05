@@ -45,12 +45,14 @@
     key:   "{{ lookup('file', users_authorized_keys_dir + '/' + item.name) }}"
     state: "present"
   when: item.authorized_keys is defined and item.authorized_keys
-  with_items: "{{ userlist }}"
+  with_flattened:
+    - "{{ userlist }}"
+    - "{{ users_extra_user_list }}"
 
 - name: check if sudo user or group exists
   set_fact:
-    sudouser_exists:  "{{ true in (userlist |rejectattr('sudo', 'undefined') |map(attribute='sudo') |list) }}"
-    sudogroup_exists: "{{ true in (users_group_list |rejectattr('sudo', 'undefined') |map(attribute='sudo') |list) }}"
+    sudouser_exists:  "{{ true in (userlist |union(users_extra_user_list) |rejectattr('sudo', 'undefined') |map(attribute='sudo') |list) }}"
+    sudogroup_exists: "{{ true in (users_group_list |union(users_extra_group_list) |rejectattr('sudo', 'undefined') |map(attribute='sudo') |list) }}"
 
 - name: sudoers configuration
   template:

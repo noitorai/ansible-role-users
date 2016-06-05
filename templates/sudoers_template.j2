@@ -3,7 +3,7 @@
 {% if sudogroup_exists %}
 
 # Allows people in following group(s) to run all commands
-{%   for i in users_group_list %}
+{%   for i in users_group_list|union(users_extra_group_list) %}
 {%     if 'sudo' in i %}
 {%       if i.sudo %}
 %{{ i.name }} ALL=(ALL:ALL) ALL
@@ -14,7 +14,7 @@
 {% if sudouser_exists %}
 
 # Allows following user(s) to run all commands
-{%   for i in userlist %}
+{%   for i in userlist|union(users_extra_user_list) %}
 {%     if 'sudo' in i %}
 {%       if i.sudo %}
 {{ i.name }} ALL=(ALL:ALL) ALL
