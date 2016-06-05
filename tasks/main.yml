@@ -9,33 +9,16 @@
   group: name={{ item.name }} gid={{ item.gid }}
   with_items: "{{ users_extra_group_list }}"
   
-  
 - name: extract users from users_generic_user_list
   set_fact:
-    userinfo: "{{ users_generic_user_list |selectattr('name','match','^' + item + '$') |list }}"
-  register: userlist_raw
-  with_items: "{{ users_username_list }}"
+    userlist: |
+      {% set l = [] %}
+      {% for i in users_username_list %}
+      {%   set _ = l.extend(users_generic_user_list |selectattr('name','match','^' + i + '$') |list) %}
+      {% endfor %}
+      {{ l }}
 
-- name: add generic user
-  user:
-    name:       "{{ item.ansible_facts.userinfo[0].name }}"
-    uid:        "{{ item.ansible_facts.userinfo[0].uid }}"
-    comment:    '{{ item.ansible_facts.userinfo[0].comment | default(omit) }}'
-    state:      '{{ item.ansible_facts.userinfo[0].state | default("present") }}'
-    group:      "{{ item.ansible_facts.userinfo[0].group }}"
-    groups:     '{{ item.ansible_facts.userinfo[0].groups | default(omit) }}'
-    append:     '{{ item.ansible_facts.userinfo[0].append | default("yes") }}'
-    createhome: '{{ item.ansible_facts.userinfo[0].createhome | default("yes") }}'
-    force:      '{{ item.ansible_facts.userinfo[0].force | default("no") }}'
-    home:       '{{ item.ansible_facts.userinfo[0].home | default(omit) }}'
-    move_home:  '{{ item.ansible_facts.userinfo[0].move_home | default("no") }}'
-    password:   '{{ item.ansible_facts.userinfo[0].password | default(omit) }}'
-    remove:     '{{ item.ansible_facts.userinfo[0].remove | default("no") }}'
-    shell:      '{{ item.ansible_facts.userinfo[0].shell | default(omit) }}'
-    update_password: '{{ item.ansible_facts.userinfo[0].update_password | default("on_create") }}'
-  with_items: "{{ userlist_raw.results }}"
-
-- name: add extra user
+- name: add user
   user:
     name:       '{{ item.name }}'
     uid:        '{{ item.uid }}'
@@ -52,25 +35,22 @@
     remove:     '{{ item.remove | default("no") }}'
     shell:      '{{ item.shell | default(omit) }}'
     update_password: '{{ item.update_password | default("on_create") }}'
-  with_items: "{{ users_extra_user_list }}"
-
+  with_flattened:
+    - "{{ userlist }}"
+    - "{{ users_extra_user_list }}"
+      
 - name: deply authorized_keys
   authorized_key:
-    user:  "{{ item.ansible_facts.userinfo[0].name }}"
-    key:   "{{ lookup('file', users_authorized_keys_dir + '/' + item.ansible_facts.userinfo[0].name) }}"
+    user:  "{{ item.name }}"
+    key:   "{{ lookup('file', users_authorized_keys_dir + '/' + item.name) }}"
     state: "present"
-  when: item.ansible_facts.userinfo[0].authorized_keys is defined and
-        item.ansible_facts.userinfo[0].authorized_keys == "yes"
-  with_items: "{{ userlist_raw.results }}"
+  when: item.authorized_keys is defined and item.authorized_keys == "yes"
+  with_items: "{{ userlist }}"
 
-- name: check if sudo group exists
+- name: check if sudo user or group exists
   set_fact:
+    sudouser_exists:  "{{ userlist |rejectattr('sudo', 'undefined') |selectattr('sudo','match','^yes$') |list |length() > 0 }}"
     sudogroup_exists: "{{ users_group_list |rejectattr('sudo', 'undefined') |selectattr('sudo','match','^yes$') |list |length() > 0 }}"
-
-- name: check if sudo user exists
-  set_fact:
-    sudouser_exists: "{{ sudouser_exists or (item.ansible_facts.userinfo[0].sudo is defined and item.ansible_facts.userinfo[0].sudo == 'yes') }}"
-  with_items: "{{ userlist_raw.results }}"
 
 - name: sudoers configuration
   template:

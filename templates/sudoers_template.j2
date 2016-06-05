@@ -14,10 +14,10 @@
 {% if sudouser_exists %}
 
 # Allows following user(s) to run all commands
-{%   for i in userlist_raw.results %}
-{%     if 'sudo' in i.ansible_facts.userinfo[0] %}
-{%       if i.ansible_facts.userinfo[0].sudo == 'yes' %}
-{{ i.ansible_facts.userinfo[0].name }} ALL=(ALL:ALL) ALL
+{%   for i in userlist %}
+{%     if 'sudo' in i %}
+{%       if i.sudo == 'yes' %}
+{{ i.name }} ALL=(ALL:ALL) ALL
 {%       endif %}
 {%     endif %}
 {%   endfor %}
