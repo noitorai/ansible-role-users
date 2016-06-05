@@ -1,5 +1,5 @@
 ---
-users_group_list:
+users_generic_group_list:
   - { name: admin, gid: 1101 }
   - { name: test1, gid: 1200, sudo: no }
   - { name: test2, gid: 1202, sudo: yes }

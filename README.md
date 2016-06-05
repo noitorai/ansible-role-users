@@ -16,6 +16,7 @@ Role Variables
 | variable                  | description                                                       | default value              |
 |---------------------------+-------------------------------------------------------------------+----------------------------|
 | users_generic_user_list   | 全ユーザのリスト (詳細は後述)                                     | []                         |
+| users_generic_group_list  | 全グループのリスト (詳細は後述)                                   | []                         |
 | users_username_list       | 作成/削除するユーザのリスト (詳細は後述)                          | []                         |
 | users_group_list          | 作成/削除するグループのリスト (詳細は後述)                        | []                         |
 | users_extra_user_list     | users_username_list以外に作成/削除するユーザのリスト (詳細は後述) | []                         |
@@ -65,6 +66,31 @@ users_generic_user_list:
   - { name: test3, uid: 1203, group: test3,  groups: wheel, comment: "test3 user", authorized_keys: "no" }
 ```
 
+### users_generic_group_list
+
+ansible管理下のサーバ共通で使用するグループを定義します。
+groupモジュールと同じパラメータ(一部未定義)名のものは、値をそのままgroup
+モジュールに渡します。使用可能なパラメータは下表の通りです。
+
+| key  | required | default value |
+|------+----------+---------------|
+| name | yes      |               |
+| gid  | yes      |               |
+| sudo | no       | no            |
+
+※ sudoがyesの場合、/etc/sudoers.d配下のファイルにsudo可能にする設定を
+   追加します。
+
+#### Example users_generic_user_list
+
+```
+users_generic_group_list:
+  - { name: admin, gid: 1101 }
+  - { name: test1, gid: 1200, sudo: no }
+  - { name: test2, gid: 1202, sudo: yes }
+  - { name: test3, gid: 1203 }
+```
+
 ### users_username_list
 
 作成/削除するユーザのリストを定義します。users_generic_user_listに記載
@@ -81,25 +107,16 @@ users_username_list:
 
 ### users_group_list
 
-作成/削除するグループのリストを定義します。
-
-| key  | required | default value |
-|------+----------+---------------|
-| name | yes      |               |
-| gid  | yes      |               |
-| sudo | no       | no            |
-
-※ sudoがyesの場合、/etc/sudoers.d配下のファイルにsudo可能にする設定を
-   追加します。
+作成/削除するグループのリストを定義します。users_generic_group_listに
+記載のグループ名のみ指定できます。
 
 #### Example users_group_list
 
 ```
 users_group_list:
-  - { name: admin, gid: 1101 }
-  - { name: test1, gid: 1200, sudo: no }
-  - { name: test2, gid: 1202, sudo: yes }
-  - { name: test3, gid: 1203 }
+  - admin
+  - test1
+  - test2
 ```
 
 ### users_extra_user_list
@@ -112,19 +129,19 @@ users_generic_user_listに記載のないユーザを作成する場合に使用
 
 ```
 users_extra_user_list:
-  - { name: extrauser, uid: 1305, group: extragroup, comment: "extrauser" }
+  - { name: extrauser, uid: 1305, group: extragroup, comment: "extrauser", authorized_keys: yes,  }
 ```
 
 ### users_extra_group_list
 
 users_group_listに記載のないグループを作成する場合に使用します。
-フォーマットはusers_group_listと同じです。そちらを参照してください。
+フォーマットはusers_generic_group_listと同じです。そちらを参照してください。
 
 #### Extrauser users_extra_group_list
 
 ```
 users_extra_group_list:
-  - { name: extragroup, gid: 1300 }
+  - { name: extragroup, gid: 1300, sudo: yes }
 ```
 
 Dependencies

@@ -4,6 +4,11 @@ users_username_list:
   - test1
   - test3
 
+users_group_list:
+  - admin
+  - test1
+  - test2
+
 users_extra_group_list:
   - { name: extragroup, gid: 1300, sudo: yes }
   
