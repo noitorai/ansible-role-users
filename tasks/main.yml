@@ -1,9 +1,18 @@
 ---
 # tasks file for users
 
+- name: extract groups from users_generic_group_list
+  set_fact:
+    grouplist: |
+      {% set l = [] %}
+      {% for i in users_group_list %}
+      {%   set _ = l.extend(users_generic_group_list |selectattr('name','match','^' + i + '$') |list) %}
+      {% endfor %}
+      {{ l }}
+
 - name: add group
   group: name={{ item.name }} gid={{ item.gid }}
-  with_items: "{{ users_generic_group_list }}"
+  with_items: "{{ grouplist }}"
 
 - name: add extra group
   group: name={{ item.name }} gid={{ item.gid }}
@@ -52,7 +61,7 @@
 - name: check if sudo user or group exists
   set_fact:
     sudouser_exists:  "{{ true in (userlist |union(users_extra_user_list) |rejectattr('sudo', 'undefined') |map(attribute='sudo') |list) }}"
-    sudogroup_exists: "{{ true in (users_generic_group_list |union(users_extra_group_list) |rejectattr('sudo', 'undefined') |map(attribute='sudo') |list) }}"
+    sudogroup_exists: "{{ true in (grouplist |union(users_extra_group_list) |rejectattr('sudo', 'undefined') |map(attribute='sudo') |list) }}"
 
 - name: sudoers configuration
   template:
