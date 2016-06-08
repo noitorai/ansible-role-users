@@ -9,4 +9,3 @@ users_generic_user_list:
   - { name: test1, uid: 1200, group: test1,  authorized_keys: yes, sudo: yes }
   - { name: test2, uid: 1202, group: test2,  groups: wheel, comment: "test2 user" }
   - { name: test3, uid: 1203, group: test3,  groups: wheel, comment: "test3 user", authorized_keys: no }
-

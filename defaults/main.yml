@@ -6,8 +6,10 @@ users_username_list: []
 users_group_list: []
 users_extra_user_list: []
 users_extra_group_list: []
-users_authorized_keys_dir: "files/authorized_keys.d/"
+users_password_dir: "files/password.d"
+users_authorized_keys_dir: "files/authorized_keys.d"
 users_sudoers_filename: "ansible_managed"
+users_passwords: {}
 
 sudogroup_exists: false
 sudouser_exists: false

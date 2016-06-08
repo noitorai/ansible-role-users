@@ -24,7 +24,7 @@
   with_flattened:
     - "{{ grouplist }}"
     - "{{ users_extra_group_list }}"
-    
+
 - name: add user
   user:
     name:       '{{ item.name }}'
@@ -38,14 +38,14 @@
     force:      '{{ item.force | default("no") }}'
     home:       '{{ item.home | default(omit) }}'
     move_home:  '{{ item.move_home | default("no") }}'
-    password:   '{{ item.password | default(omit) }}'
+    password:   '{{ users_passwords[item.name] | default(omit) }}'
     remove:     '{{ item.remove | default("no") }}'
     shell:      '{{ item.shell | default(omit) }}'
     update_password: '{{ item.update_password | default("on_create") }}'
   with_flattened:
     - "{{ userlist }}"
     - "{{ users_extra_user_list }}"
-      
+
 - name: deply authorized_keys
   authorized_key:
     user:  "{{ item.name }}"

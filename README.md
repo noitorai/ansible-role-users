@@ -21,6 +21,7 @@ Role Variables
 | users_group_list          | 作成/削除するグループのリスト (詳細は後述)                        | []                         |
 | users_extra_user_list     | users_username_list以外に作成/削除するユーザのリスト (詳細は後述) | []                         |
 | users_extra_group_list    | users_group_list以外に作成/削除するグループのリスト (詳細は後述)  | []                         |
+| users_passwords           | ユーザのパスワードを記載したマッピング (詳細は後述)               | {}                         |
 | users_authorized_keys_dir | 参照するauthorized_keysの配置場所                                 | "files/authorized_keys.d/" |
 | users_sudoers_filename    | 各サーバに配置するsudoersファイルの名前                           | "ansible_managed"          |
 
@@ -135,13 +136,55 @@ users_extra_user_list:
 ### users_extra_group_list
 
 users_group_listに記載のないグループを作成する場合に使用します。
-フォーマットはusers_generic_group_listと同じです。そちらを参照してください。
+フォーマットはusers_generic_group_listと同じです。そちらを参照してくだ
+さい。
 
 #### Extrauser users_extra_group_list
 
 ```
 users_extra_group_list:
   - { name: extragroup, gid: 1300, sudo: yes }
+```
+### users_passwords
+
+ユーザのパスワードを記載したマッピングです。キーにユーザ名、値にパスワー
+ドを指定します。独立したファイルに定義して暗号化しておくことをお勧めし
+ます。
+
+#### Example users_passwords
+
+```
+users_passwords:
+  test1: '$6$rounds=100000$FMS0M3TZnxT9.4k/$neBNNdKuuFkpR3nTqchYPHc7u7DhYQrLXPnrlZJ6x2wVT1L5AVYm1CtsIKx8wPXi2CKlmLF9xEo9BLTWspol.0'
+  test2: '$6$rounds=100000$3GP02reKif3EQP7A$lYS6jpxcPkZj6tTZx9ULDe/XIhcYFIra6nHAXcHvwQLs6oQLQKV9.BJpd7..X8igzqZHWfp9wbFiQlYAQnB9M/'
+```
+
+パスワード文字列は以下のコマンドで生成できます。これにはpython-passlib
+が必要です。aptやyumからインストールできます。
+
+```
+python -c "from passlib.hash import sha512_crypt; import getpass; print sha512_crypt.encrypt(getpass.getpass())"
+```
+
+そのまま設定ファイルに記載しても良いですが、念の為別ファイルに記載して
+暗号化しておくとより安心です。以下はsecret.ymlを暗号化する場合の例です。
+暗号化した後は「ansible-vault edit」で編集することができます。
+
+```
+$ cat secret.yml
+users_passwords:
+  test1: '$6$rounds=100000$FMS0M3TZnxT9.4k/$neBNNdKuuFkpR3nTqchYPHc7u7DhYQrLXPnrlZJ6x2wVT1L5AVYm1CtsIKx8wPXi2CKlmLF9xEo9BLTWspol.0'
+  test2: '$6$rounds=100000$3GP02reKif3EQP7A$lYS6jpxcPkZj6tTZx9ULDe/XIhcYFIra6nHAXcHvwQLs6oQLQKV9.BJpd7..X8igzqZHWfp9wbFiQlYAQnB9M/'
+  
+$ ansible-vault encrypt secret.yml
+New Vault password: 
+Confirm New Vault password: 
+Encryption successful
+
+$ cat secret.yml
+$ANSIBLE_VAULT;1.1;AES256
+30366563306366376466666163313732333032383738636264363635356566326336373861313438
+(...snip...)
 ```
 
 Dependencies
@@ -154,6 +197,9 @@ Example Playbook
 
 ```
     - hosts: servers
+      become: yes
+      vars_file:
+        - secret.yml
       roles:
-         - users
+        - users
 ```
