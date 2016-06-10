@@ -17,9 +17,9 @@ Role Variables
 |---------------------------|-------------------------------------------------------------------|----------------------------|
 | users_generic_user_list   | 全ユーザのリスト (詳細は後述)                                     | []                         |
 | users_generic_group_list  | 全グループのリスト (詳細は後述)                                   | []                         |
-| users_username_list       | 作成/削除するユーザのリスト (詳細は後述)                          | []                         |
+| users_user_list           | 作成/削除するユーザのリスト (詳細は後述)                          | []                         |
 | users_group_list          | 作成/削除するグループのリスト (詳細は後述)                        | []                         |
-| users_extra_user_list     | users_username_list以外に作成/削除するユーザのリスト (詳細は後述) | []                         |
+| users_extra_user_list     | users_user_list以外に作成/削除するユーザのリスト (詳細は後述)     | []                         |
 | users_extra_group_list    | users_group_list以外に作成/削除するグループのリスト (詳細は後述)  | []                         |
 | users_passwords           | ユーザのパスワードを記載したマッピング (詳細は後述)               | {}                         |
 | users_authorized_keys_dir | 参照するauthorized_keysの配置場所                                 | "files/authorized_keys.d/" |
@@ -92,15 +92,15 @@ users_generic_group_list:
   - { name: test3, gid: 1203 }
 ```
 
-### users_username_list
+### users_user_list
 
 作成/削除するユーザのリストを定義します。users_generic_user_listに記載
 のユーザ名のみ指定できます。
 
-#### Example users_username_list
+#### Example users_user_list
 
 ```
-users_username_list:
+users_user_list:
   - test1
   - test2
   - test3

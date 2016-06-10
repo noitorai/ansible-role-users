@@ -14,7 +14,7 @@
   set_fact:
     userlist: |
       {% set l = [] %}
-      {% for i in users_username_list %}
+      {% for i in users_user_list %}
       {%   set _ = l.extend(users_generic_user_list |selectattr('name','match','^' + i + '$') |list) %}
       {% endfor %}
       {{ l }}
