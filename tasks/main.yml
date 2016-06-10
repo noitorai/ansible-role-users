@@ -31,7 +31,7 @@
     uid:        '{{ item.uid }}'
     comment:    '{{ item.comment | default(omit) }}'
     state:      '{{ item.state | default("present") }}'
-    group:      '{{ item.group }}'
+    group:      '{{ item.group | default(omit) }}'
     groups:     '{{ item.groups | default(omit) }}'
     append:     '{{ item.append | default("yes") }}'
     createhome: '{{ item.createhome | default("yes") }}'

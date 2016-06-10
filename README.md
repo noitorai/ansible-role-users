@@ -38,7 +38,7 @@ userモジュールと同じパラメータ(一部未定義)名のものは、�
 | uid             | yes      |               |
 | comment         | no       |               |
 | state           | no       | present       |
-| group           | yes      |               |
+| group           | no       |               |
 | groups          | no       |               |
 | append          | no       | no            |
 | createhome      | no       | yes           |
