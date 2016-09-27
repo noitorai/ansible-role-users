@@ -1,0 +1,17 @@
+---
+## test: add groups
+
+- hosts: localhost
+  vars_files:
+    - group_vars/all.yml
+  remote_user: root
+  roles:
+
+   # delete groups
+   - role: ../..
+     users_generic_group_list:
+       - { name: admin, gid: 1101, state: absent }
+       - { name: test1, gid: 1200, state: absent }
+     users_group_list:
+       - admin
+       - test1

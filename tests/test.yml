@@ -1,43 +1,5 @@
 ---
-- hosts: localhost
-  vars_files:
-    - group_vars/all.yml
-    - secret.yml
-  remote_user: root
-  roles: 
-    # add groups
-    - role: ../..
-      users_group_list:
-        - admin
-        - test1
-   
-    # delete groups
-    - role: ../..
-      users_generic_group_list:
-        - { name: admin, gid: 1101, state: absent }
-        - { name: test1, gid: 1200, state: absent }
-      users_group_list:
-        - admin
-        - test1
-
-    # add users and groups
-    - role: ../..
-      users_group_list:
-        - admin
-        - test1
-      users_user_list:
-        - test1
-
-    # delete users and groups
-    - role: ../..
-      users_generic_user_list:
-        - { name: test1, uid: 1200, state: absent, remove: yes }
-      users_user_list:
-        - test1
-    - role: ../..
-      users_generic_group_list:
-        - { name: admin, gid: 1101, state: absent, authorized_keys: no }
-        - { name: test1, gid: 1200, state: absent, authorized_keys: no }
-      users_group_list:
-        - admin
-        - test1
+## test.yml
+- include: test-add-group.yml
+- include: test-delete-group.yml
+- include: test-add-user-and-group.yml

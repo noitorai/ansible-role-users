@@ -1,0 +1,13 @@
+---
+## test: add groups
+
+- hosts: localhost
+  vars_files:
+    - group_vars/all.yml
+  remote_user: root
+  roles:
+
+  - role: ../..
+    users_group_list:
+      - admin
+      - test1
