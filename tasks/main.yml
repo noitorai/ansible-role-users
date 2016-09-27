@@ -20,7 +20,10 @@
       {{ l }}
 
 - name: add group
-  group: name={{ item.name }} gid={{ item.gid }}
+  group:
+    name: '{{ item.name }}'
+    gid: '{{ item.gid }}'
+    state: '{{ item.state | default("present") }}'
   with_flattened:
     - "{{ grouplist }}"
     - "{{ users_extra_group_list }}"
