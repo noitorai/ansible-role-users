@@ -55,6 +55,7 @@
   with_flattened:
     - "{{ userlist }}"
     - "{{ users_extra_user_list }}"
+  ignore_errors: yes
 
 - name: check if sudo user or group exists
   set_fact:
