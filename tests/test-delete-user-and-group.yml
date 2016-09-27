@@ -1,0 +1,21 @@
+---
+## test: delete users and groups
+
+- hosts: localhost
+  vars_files:
+    - group_vars/all.yml
+  remote_user: root
+  roles:
+
+  - role: ../..
+    users_generic_user_list:
+      - { name: test1, uid: 1200, state: absent, remove: yes }
+    users_user_list:
+      - test1
+  - role: ../..
+    users_generic_group_list:
+      - { name: admin, gid: 1101, state: absent, authorized_keys: no }
+      - { name: test1, gid: 1200, state: absent, authorized_keys: no }
+    users_group_list:
+      - admin
+      - test1

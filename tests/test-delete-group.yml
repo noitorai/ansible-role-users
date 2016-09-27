@@ -1,5 +1,5 @@
 ---
-## test: add groups
+## test: delete groups
 
 - hosts: localhost
   vars_files:
@@ -8,6 +8,9 @@
   roles:
 
   - role: ../..
+    users_generic_group_list:
+      - { name: admin, gid: 1101, state: absent }
+      - { name: test1, gid: 1200, state: absent }
     users_group_list:
       - admin
       - test1
