@@ -2,12 +2,23 @@
 ## test: add groups
 
 - hosts: localhost
-  vars_files:
-    - group_vars/all.yml
   remote_user: root
   roles:
 
   - role: ../..
+    users_generic_group_list:
+      - { name: admin, gid: 1101, sudo: yes }
+      - { name: test1, gid: 1201, sudo: yes, nopasswd: yes }
+      - { name: test2, gid: 1202, sudo: yes, nopasswd: no }
+      - { name: test3, gid: 1203 }
+      - { name: test4, gid: 1204, sudo: no }
+      - { name: test5, gid: 1205, sudo: no, nopasswd: no }
+      - { name: test6, gid: 1206, sudo: no, nopasswd: yes }
     users_group_list:
       - admin
       - test1
+      - test2
+      - test3
+      - test4
+      - test5
+      - test6

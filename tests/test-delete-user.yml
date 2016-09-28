@@ -1,0 +1,30 @@
+---
+## test: delete users
+
+- hosts: localhost
+  remote_user: root
+  roles:
+
+   - role: ../..
+     users_generic_user_list:
+       - { name: test1, state: absent, remove: yes }
+       - { name: test2, state: absent, remove: yes }
+       - { name: test3, state: absent, remove: yes }
+       - { name: test4, state: absent, remove: yes }
+       - { name: test5, state: absent, remove: yes }
+       - { name: test6, state: absent, remove: yes }
+       - { name: test7, state: absent, remove: yes }
+     users_user_list:
+       - test1
+       - test2
+       - test3
+       - test4
+       - test5
+       - test6
+       - test7
+
+   - role: ../..
+     users_generic_group_list:
+       - { name: admin, state: absent }
+     users_group_list:
+       - admin

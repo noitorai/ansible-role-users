@@ -1,0 +1,31 @@
+---
+## test: add users
+
+- hosts: localhost
+  remote_user: root
+  roles:
+
+   - role: ../..
+     users_generic_group_list:
+       - { name: admin }
+     users_group_list:
+       - admin
+     users_generic_user_list:
+       - { name: test1, uid: 1201, comment: "test1 user", state: present,
+           group: admin, groups: "ftp", append: no, createhome: yes,
+           home: /home/test1, move_home: no, shell: "/bin/sh",
+           authorized_keys: yes, sudo: yes, nopasswd: yes }
+       - { name: test2, uid: 1202, comment: "test2 user", sudo: yes }
+       - { name: test3, uid: 1203, comment: "test3 user", sudo: yes, nopasswd: no }
+       - { name: test4, uid: 1204, comment: "test4 user", sudo: no}
+       - { name: test5, uid: 1205, comment: "test5 user", sudo: no, nopasswd: no }
+       - { name: test6, uid: 1206, comment: "test6 user", sudo: no, nopasswd: yes }
+       - { name: test7, uid: 1207, comment: "test7 user", nopasswd: yes }
+     users_user_list:
+       - test1
+       - test2
+       - test3
+       - test4
+       - test5
+       - test6
+       - test7

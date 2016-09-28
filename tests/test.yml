@@ -2,5 +2,7 @@
 ## test.yml
 - include: test-add-group.yml
 - include: test-delete-group.yml
+- include: test-add-user.yml
+- include: test-delete-user.yml
 - include: test-add-user-and-group.yml
 - include: test-delete-user-and-group.yml

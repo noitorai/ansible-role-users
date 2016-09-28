@@ -2,15 +2,23 @@
 ## test: delete groups
 
 - hosts: localhost
-  vars_files:
-    - group_vars/all.yml
   remote_user: root
   roles:
 
   - role: ../..
     users_generic_group_list:
-      - { name: admin, gid: 1101, state: absent }
-      - { name: test1, gid: 1200, state: absent }
+      - { name: admin, state: absent }
+      - { name: test1, state: absent }
+      - { name: test2, state: absent }
+      - { name: test3, state: absent }
+      - { name: test4, state: absent }
+      - { name: test5, state: absent }
+      - { name: test6, state: absent }
     users_group_list:
       - admin
       - test1
+      - test2
+      - test3
+      - test4
+      - test5
+      - test6
