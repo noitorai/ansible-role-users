@@ -6,7 +6,11 @@
 {%   for i in grouplist|union(users_extra_group_list) %}
 {%     if 'sudo' in i %}
 {%       if i.sudo %}
+{%         if ('nopasswd' in i) and i.nopasswd %}
+%{{ i.name }} ALL=(ALL:ALL) NOPASSWD: ALL
+{%         else %}
 %{{ i.name }} ALL=(ALL:ALL) ALL
+{%         endif %}
 {%       endif %}
 {%     endif %}
 {%   endfor %}
@@ -17,7 +21,11 @@
 {%   for i in userlist|union(users_extra_user_list) %}
 {%     if 'sudo' in i %}
 {%       if i.sudo %}
+{%         if ('nopasswd' in i) and i.nopasswd %}
+{{ i.name }} ALL=(ALL:ALL) NOPASSWD: ALL
+{%         else %}
 {{ i.name }} ALL=(ALL:ALL) ALL
+{%         endif %}
 {%       endif %}
 {%     endif %}
 {%   endfor %}

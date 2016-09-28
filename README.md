@@ -32,25 +32,25 @@ ansible管理下のサーバ共通で使用するユーザを定義します。
 userモジュールと同じパラメータ(一部未定義)名のものは、値をそのままuser
 モジュールに渡します。使用可能なパラメータは下表の通りです。
 
-| key             | required | default value |
-|-----------------|----------|---------------|
-| name            | yes      |               |
-| uid             | yes      |               |
-| comment         | no       |               |
-| state           | no       | present       |
-| group           | no       |               |
-| groups          | no       |               |
-| append          | no       | no            |
-| createhome      | no       | yes           |
-| force           | no       |               |
-| home            | no       |               |
-| move_home       | no       | no            |
-| password        | no       |               |
-| remove          | no       | no            |
-| shell           | no       |               |
-| update_password | no       | always        |
-| sudo            | no       | no            |
-| authorized_keys | no       | no            |
+| parameter       | required | default |
+|-----------------|----------|---------|
+| name            | yes      |         |
+| uid             | yes      |         |
+| comment         | no       |         |
+| state           | no       | present |
+| group           | no       |         |
+| groups          | no       |         |
+| append          | no       | no      |
+| createhome      | no       | yes     |
+| force           | no       |         |
+| home            | no       |         |
+| move_home       | no       | no      |
+| remove          | no       | no      |
+| shell           | no       |         |
+| update_password | no       | always  |
+| sudo            | no       | no      |
+| nopasswd        | no       | no      |
+| authorized_keys | no       | no      |
 
 ※ authorized_keysがyesの場合、users_authorized_keys_dir以下のユーザ名
    のファイルの中身をauthorized_keysとして配置します。
@@ -58,13 +58,16 @@ userモジュールと同じパラメータ(一部未定義)名のものは、�
 ※ sudoがyesの場合、/etc/sudoers.d配下のファイルにsudo可能にする設定を
    追加します。
 
+※ nopasswdはsudoがyesの場合のみ有効なパラメータです。yesの時、パスワ
+   ードなしでsudo可能にします。
+
 #### Example users_generic_user_list
 
 ```
 users_generic_user_list:
-  - { name: test1, uid: 1200, group: test1,  authorized_keys: "yes", sudo: "yes" }
-  - { name: test2, uid: 1202, group: test2,  groups: wheel, comment: "test2 user" }
-  - { name: test3, uid: 1203, group: test3,  groups: wheel, comment: "test3 user", authorized_keys: "no" }
+  - { name: test1, uid: 1200, group: test1,  authorized_keys: yes, sudo: yes, nopasswd: yes }
+  - { name: test2, uid: 1202, group: test2,  groups: wheel, comment: "test2 user", sudo: no }
+  - { name: test3, uid: 1203, group: test3,  groups: wheel, comment: "test3 user", authorized_keys: no, sudo: yes }
 ```
 
 ### users_generic_group_list
@@ -73,21 +76,25 @@ ansible管理下のサーバ共通で使用するグループを定義します�
 groupモジュールと同じパラメータ(一部未定義)名のものは、値をそのままgroup
 モジュールに渡します。使用可能なパラメータは下表の通りです。
 
-| key   | required | default value |
-|-------|----------|---------------|
-| name  | yes      |               |
-| gid   | yes      |               |
-| state | no       | present       |
-| sudo  | no       | no            |
+| parameter | required | default |
+|-----------|----------|---------|
+| name      | yes      |         |
+| gid       | no       |         |
+| state     | no       | present |
+| sudo      | no       | no      |
+| nopasswd  | no       | no      |
 
 ※ sudoがyesの場合、/etc/sudoers.d配下のファイルにsudo可能にする設定を
    追加します。
+
+※ nopasswdはsudoがyesの場合のみ有効なパラメータです。yesの時、パスワ
+   ードなしでsudo可能にします。
 
 #### Example users_generic_user_list
 
 ```
 users_generic_group_list:
-  - { name: admin, gid: 1101 }
+  - { name: admin, gid: 1101, sudo: yes, nopasswd: yes }
   - { name: test1, gid: 1200, sudo: no }
   - { name: test2, gid: 1202, sudo: yes }
   - { name: test3, gid: 1203 }
