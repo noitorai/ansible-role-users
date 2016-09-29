@@ -130,28 +130,32 @@ users_group_list:
 
 ### users_extra_user_list
 
-users_generic_user_listに記載のないユーザを作成する場合に使用します。
-フォーマットはusers_generic_user_listと同じです。そちらを参照してくだ
-さい。
+users_user_listに記載のないユーザを作成する場合に使用します。
+users_generic_user_listの要素と同じ形式のマッピング、もしくは
+users_generic_group_listに記載のユーザ名が指定できます。
+
 
 #### Example users_extra_user_list
 
 ```
 users_extra_user_list:
-  - { name: extrauser, uid: 1305, group: extragroup, comment: "extrauser", authorized_keys: yes,  }
+  - { name: extrauser, uid: 1305, group: extragroup, comment: "extrauser", authorized_keys: yes }
+  - admin
 ```
 
 ### users_extra_group_list
 
 users_group_listに記載のないグループを作成する場合に使用します。
-フォーマットはusers_generic_group_listと同じです。そちらを参照してくだ
-さい。
+users_generic_group_listの要素と同じ形式のマッピング、もしくは
+users_generic_group_listに記載のグループ名が指定できます。
+
 
 #### Extrauser users_extra_group_list
 
 ```
 users_extra_group_list:
   - { name: extragroup, gid: 1300, sudo: yes }
+  - test1
 ```
 ### users_passwords
 

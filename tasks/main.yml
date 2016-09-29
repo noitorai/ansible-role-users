@@ -8,6 +8,13 @@
       {% for i in users_group_list %}
       {%   set _ = l.extend(users_generic_group_list |selectattr('name','match','^' + i + '$') |list) %}
       {% endfor %}
+      {% for j in users_extra_group_list %}
+      {%   if j is mapping %}
+      {%     set _ = l.append(j) %}
+      {%   else %}
+      {%     set _ = l.extend(users_generic_group_list |selectattr('name','match','^' + j + '$') |list) %}
+      {%   endif %}
+      {% endfor %}
       {{ l }}
 
 - name: extract users from users_generic_user_list
@@ -17,6 +24,13 @@
       {% for i in users_user_list %}
       {%   set _ = l.extend(users_generic_user_list |selectattr('name','match','^' + i + '$') |list) %}
       {% endfor %}
+      {% for j in users_extra_user_list %}
+      {%   if j is mapping %}
+      {%     set _ = l.append(j) %}
+      {%   else %}
+      {%     set _ = l.extend(users_generic_user_list |selectattr('name','match','^' + j + '$') |list) %}
+      {%   endif %}
+      {% endfor %}
       {{ l }}
 
 - name: add group
@@ -24,9 +38,7 @@
     name: '{{ item.name }}'
     gid: '{{ item.gid | default(omit) }}'
     state: '{{ item.state | default("present") }}'
-  with_flattened:
-    - "{{ grouplist }}"
-    - "{{ users_extra_group_list }}"
+  with_items: "{{ grouplist }}"
 
 - name: add user
   user:
@@ -45,9 +57,7 @@
     remove:     '{{ item.remove | default("no") }}'
     shell:      '{{ item.shell | default(omit) }}'
     update_password: '{{ item.update_password | default("on_create") }}'
-  with_flattened:
-    - "{{ userlist }}"
-    - "{{ users_extra_user_list }}"
+  with_items: "{{ userlist }}"
 
 - name: deply authorized_keys
   authorized_key:
@@ -55,15 +65,13 @@
     key:   "{{ lookup('file', users_authorized_keys_dir + '/' + item.name) }}"
     state: "present"
   when: item.authorized_keys is defined and item.authorized_keys
-  with_flattened:
-    - "{{ userlist }}"
-    - "{{ users_extra_user_list }}"
+  with_items: "{{ userlist }}"
   ignore_errors: yes
 
 - name: check if sudo user or group exists
   set_fact:
-    sudouser_exists:  "{{ true in (userlist |union(users_extra_user_list) |rejectattr('sudo', 'undefined') |map(attribute='sudo') |list) }}"
-    sudogroup_exists: "{{ true in (grouplist |union(users_extra_group_list) |rejectattr('sudo', 'undefined') |map(attribute='sudo') |list) }}"
+    sudouser_exists:  "{{ true in (userlist |rejectattr('sudo', 'undefined') |map(attribute='sudo') |list) }}"
+    sudogroup_exists: "{{ true in (grouplist |rejectattr('sudo', 'undefined') |map(attribute='sudo') |list) }}"
 
 - name: sudoers configuration
   template:

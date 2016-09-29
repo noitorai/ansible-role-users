@@ -1,0 +1,13 @@
+---
+## test: add groups
+
+- hosts: localhost
+  remote_user: root
+  roles:
+
+  - role: ../..
+    users_generic_group_list:
+      - { name: test1, state: absent }
+    users_extra_group_list:
+      - test1
+      - { name: extragroup1, state: absent }
