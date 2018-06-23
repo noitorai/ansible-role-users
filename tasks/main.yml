@@ -59,7 +59,7 @@
     update_password: '{{ item.update_password | default("on_create") }}'
   with_items: "{{ userlist }}"
 
-- name: deply authorized_keys
+- name: deploy authorized_keys
   authorized_key:
     user:  "{{ item.name }}"
     key:   "{{ lookup('file', users_authorized_keys_dir + '/' + item.name) }}"
