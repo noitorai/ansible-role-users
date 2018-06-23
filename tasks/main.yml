@@ -56,7 +56,7 @@
     password:   '{{ users_passwords[item.name] | default(omit) }}'
     remove:     '{{ item.remove | default("no") }}'
     shell:      '{{ item.shell | default(omit) }}'
-    update_password: '{{ item.update_password | default("on_create") }}'
+    update_password: '{{ item.update_password | default(omit) }}'
   with_items: "{{ userlist }}"
 
 - name: deploy authorized_keys
