@@ -80,3 +80,4 @@
     owner:  root
     group:  root
     mode:   "0440"
+  when: sudouser_exists or sudogroup_exists
